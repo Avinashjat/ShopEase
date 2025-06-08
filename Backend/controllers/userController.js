@@ -106,7 +106,7 @@ const verifyOtp = async (req, res) => {
 // COMPLETE PROFILE
 const completeProfile = async (req, res) => {
   try {
- 
+    const { userId, name, email } = req.body; // ✅ Extract userId, name, email
 
     if (!userId || !name || !email || !req.file) {
       return res.status(400).json({ success: false, message: "All fields including profile photo are required" });
@@ -143,7 +143,6 @@ const completeProfile = async (req, res) => {
 
     await user.save();
 
-   
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -156,14 +155,15 @@ const completeProfile = async (req, res) => {
         mobile: user.mobile,
         profilePhoto: user.profilePhoto,
       },
-      token, // Send new token
+      token,
     });
+
   } catch (error) {
     console.error("Complete Profile Error:", error.message);
-    
     res.status(500).json({ success: false, message: "Failed to complete profile: " + error.message });
   }
 };
+
 
 
 const getProfile = async (req, res) => {
